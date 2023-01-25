@@ -14,6 +14,8 @@
 		B641A9DB2980E3E900816766 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B641A9DA2980E3E900816766 /* Assets.xcassets */; };
 		B641A9DE2980E3E900816766 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B641A9DC2980E3E900816766 /* LaunchScreen.storyboard */; };
 		B663C3CC2980E753003FAC75 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B663C3CB2980E753003FAC75 /* SnapKit */; };
+		B663C3D52980E96F003FAC75 /* ReactiveKit in Frameworks */ = {isa = PBXBuildFile; productRef = B663C3D42980E96F003FAC75 /* ReactiveKit */; };
+		B663C3D82980E988003FAC75 /* Bond in Frameworks */ = {isa = PBXBuildFile; productRef = B663C3D72980E988003FAC75 /* Bond */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B663C3D52980E96F003FAC75 /* ReactiveKit in Frameworks */,
+				B663C3D82980E988003FAC75 /* Bond in Frameworks */,
 				B663C3CC2980E753003FAC75 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -87,6 +91,8 @@
 			name = WalkThroughDemo;
 			packageProductDependencies = (
 				B663C3CB2980E753003FAC75 /* SnapKit */,
+				B663C3D42980E96F003FAC75 /* ReactiveKit */,
+				B663C3D72980E988003FAC75 /* Bond */,
 			);
 			productName = WalkThroughDemo;
 			productReference = B641A9CE2980E3E700816766 /* WalkThroughDemo.app */;
@@ -118,6 +124,8 @@
 			mainGroup = B641A9C52980E3E700816766;
 			packageReferences = (
 				B663C3CA2980E753003FAC75 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				B663C3D32980E96F003FAC75 /* XCRemoteSwiftPackageReference "ReactiveKit" */,
+				B663C3D62980E988003FAC75 /* XCRemoteSwiftPackageReference "Bond" */,
 			);
 			productRefGroup = B641A9CF2980E3E700816766 /* Products */;
 			projectDirPath = "";
@@ -378,6 +386,22 @@
 				version = 5.0.1;
 			};
 		};
+		B663C3D32980E96F003FAC75 /* XCRemoteSwiftPackageReference "ReactiveKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DeclarativeHub/ReactiveKit";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		B663C3D62980E988003FAC75 /* XCRemoteSwiftPackageReference "Bond" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DeclarativeHub/Bond";
+			requirement = {
+				kind = exactVersion;
+				version = 7.8.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -385,6 +409,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B663C3CA2980E753003FAC75 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		B663C3D42980E96F003FAC75 /* ReactiveKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B663C3D32980E96F003FAC75 /* XCRemoteSwiftPackageReference "ReactiveKit" */;
+			productName = ReactiveKit;
+		};
+		B663C3D72980E988003FAC75 /* Bond */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B663C3D62980E988003FAC75 /* XCRemoteSwiftPackageReference "Bond" */;
+			productName = Bond;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
