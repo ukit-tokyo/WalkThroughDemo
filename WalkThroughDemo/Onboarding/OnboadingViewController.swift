@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Bond
 
 protocol Applicable {}
 extension Applicable {
@@ -25,16 +26,17 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerDele
     bar.progressTintColor = .red
     bar.backgroundColor = .gray
   }
-  private lazy var pageViewController = UIPageViewController()
+  private lazy var pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
   private lazy var pages: [UIViewController & OnboardingContentable] = [
     FirstViewController(), SecondViewController(), ThirdViewController()
   ]
-  private var currentPageIndex: Int = 0
+  private let currentPageIndex = Observable<Int>(0)
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     initializeViews()
+    initializeBinding()
   }
 
   private func initializeViews() {
@@ -58,6 +60,21 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerDele
     }
 
     progressBar.setProgress(0.3, animated: true)
-    pageViewController.setViewControllers([pages[currentPageIndex]], direction: .forward, animated: true)
+  }
+
+  private func initializeBinding() {
+    skipButton.reactive.tap
+      .bind(to: self) { me, _ in
+        let current = me.currentPageIndex.value
+        me.currentPageIndex.send(current + 1)
+      }
+
+    currentPageIndex
+      .removeDuplicates()
+      .bind(to: self) { me, index in
+        guard index >= 0, index < me.pages.count else { return }
+        let nextPage = me.pages[index]
+        me.pageViewController.setViewControllers([nextPage], direction: .forward, animated: true)
+      }
   }
 }
