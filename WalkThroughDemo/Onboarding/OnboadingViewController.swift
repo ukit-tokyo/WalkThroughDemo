@@ -57,15 +57,14 @@ final class OnboardingViewController: UIViewController {
       make.left.right.equalToSuperview()
       make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
     }
+
+    showStep(to: .first, direction: .forward)
   }
 
   private func initializeBinding() {
     skipButton.reactive.tap
       .bind(to: self) { me, _ in
-        let nextIndex = me.currentStep.value.rawValue + 1
-        if let nextStep = OnboardingStep(rawValue: nextIndex) {
-          me.showStep(to: nextStep, direction: .forward)
-        }
+        me.showNextStep()
       }
 
     currentStep
@@ -75,11 +74,24 @@ final class OnboardingViewController: UIViewController {
       .bind(to: self) { me, progress in
         me.progressBar.setProgress(progress, animated: true)
       }
+
+    pages.forEach { page in
+      page.onNext.bind(to: self) { me, _ in
+        me.showNextStep()
+      }
+    }
   }
 
   private func showStep(to step: OnboardingStep, direction: UIPageViewController.NavigationDirection) {
     guard let nextPage = pages.first(where: { $0.step == step }) else { return }
     pageViewController.setViewControllers([nextPage], direction: direction, animated: true)
     currentStep.send(step)
+  }
+
+  private func showNextStep() {
+    let nextIndex = currentStep.value.rawValue + 1
+    if let nextStep = OnboardingStep(rawValue: nextIndex) {
+      showStep(to: nextStep, direction: .forward)
+    }
   }
 }
