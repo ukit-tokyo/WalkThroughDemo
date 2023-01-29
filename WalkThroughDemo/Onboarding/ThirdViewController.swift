@@ -8,6 +8,8 @@
 import UIKit
 
 final class ThirdViewController: UIViewController, OnboardingContentable {
+  var step: OnboardingStep { .third }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 

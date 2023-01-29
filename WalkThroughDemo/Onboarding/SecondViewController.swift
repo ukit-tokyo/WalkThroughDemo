@@ -8,6 +8,8 @@
 import UIKit
 
 final class SecondViewController: UIViewController, OnboardingContentable {
+  var step: OnboardingStep { .second }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 

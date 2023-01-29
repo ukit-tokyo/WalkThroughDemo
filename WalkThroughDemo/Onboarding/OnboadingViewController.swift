@@ -20,7 +20,7 @@ extension NSObject: Applicable {}
 
 
 // MARK: -
-final class OnboardingViewController: UIViewController, UIPageViewControllerDelegate {
+final class OnboardingViewController: UIViewController {
   private lazy var skipButton = UIBarButtonItem(title: "スキップ", style: .plain, target: self, action: nil)
   private lazy var progressBar = UIProgressView().with { bar in
     bar.progressTintColor = .red
@@ -30,7 +30,7 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerDele
   private lazy var pages: [UIViewController & OnboardingContentable] = [
     FirstViewController(), SecondViewController(), ThirdViewController()
   ]
-  private let currentPageIndex = Observable<Int>(0)
+  private let currentStep = Observable<OnboardingStep>(.first)
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -45,7 +45,6 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerDele
     addChild(pageViewController)
     view.addSubview(pageViewController.view)
     pageViewController.didMove(toParent: self)
-    pageViewController.delegate = self
 
     view.addSubview(progressBar)
     progressBar.snp.makeConstraints { make in
@@ -58,23 +57,29 @@ final class OnboardingViewController: UIViewController, UIPageViewControllerDele
       make.left.right.equalToSuperview()
       make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
     }
-
-    progressBar.setProgress(0.3, animated: true)
   }
 
   private func initializeBinding() {
     skipButton.reactive.tap
       .bind(to: self) { me, _ in
-        let current = me.currentPageIndex.value
-        me.currentPageIndex.send(current + 1)
+        let nextIndex = me.currentStep.value.rawValue + 1
+        if let nextStep = OnboardingStep(rawValue: nextIndex) {
+          me.showStep(to: nextStep, direction: .forward)
+        }
       }
 
-    currentPageIndex
-      .removeDuplicates()
-      .bind(to: self) { me, index in
-        guard index >= 0, index < me.pages.count else { return }
-        let nextPage = me.pages[index]
-        me.pageViewController.setViewControllers([nextPage], direction: .forward, animated: true)
+    currentStep
+      .map { step in // 現在のステップをプログレスバーの進捗率に変換
+        (1.0 / Float(OnboardingStep.allCases.count + 1)) * Float(step.rawValue + 1)
       }
+      .bind(to: self) { me, progress in
+        me.progressBar.setProgress(progress, animated: true)
+      }
+  }
+
+  private func showStep(to step: OnboardingStep, direction: UIPageViewController.NavigationDirection) {
+    guard let nextPage = pages.first(where: { $0.step == step }) else { return }
+    pageViewController.setViewControllers([nextPage], direction: direction, animated: true)
+    currentStep.send(step)
   }
 }

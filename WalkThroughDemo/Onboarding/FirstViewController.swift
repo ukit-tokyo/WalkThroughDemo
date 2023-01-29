@@ -7,9 +7,17 @@
 
 import UIKit
 
-protocol OnboardingContentable where Self: UIViewController {}
+enum OnboardingStep: Int, CaseIterable {
+  case first, second, third
+}
+
+protocol OnboardingContentable where Self: UIViewController {
+  var step: OnboardingStep { get }
+}
 
 final class FirstViewController: UIViewController, OnboardingContentable {
+  var step: OnboardingStep { .first }
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
